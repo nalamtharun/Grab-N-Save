@@ -1,0 +1,29 @@
+{
+  "name": "grab-n-save",
+  "version": "1.0.0",
+  "description": "Grab N Save — Modern Coupon & Deal Aggregation Platform (MERN Stack)",
+  "main": "server/server.js",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed": "npm run seed --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": [
+    "mern",
+    "coupon",
+    "aggregation",
+    "deals",
+    "discounts",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Grab N Save Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
