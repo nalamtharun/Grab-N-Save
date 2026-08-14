@@ -1,11 +1,5 @@
 # Grab N Save — Coupon & Deal Aggregation Platform (MERN Stack)
 
-[![MERN Stack](https://img.shields.io/badge/Stack-MERN-10B981.svg?style=for-the-badge)](https://reactjs.org/)
-[![Node Version](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933.svg?style=for-the-badge&logo=node.js)](https://nodejs.org/)
-[![React Version](https://img.shields.io/badge/React-18.x-61DAFB.svg?style=for-the-badge&logo=react)](https://react.js.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-47A248.svg?style=for-the-badge&logo=mongodb)](https://mongodb.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-
 **Grab N Save** is a modern, high-performance **Full-Stack Coupon and Promo Code Aggregation Platform** engineered with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js). It provides instant deal discovery, interactive coupon clipping with haptic/confetti feedback, reliability vote tracking, multi-dimensional search & filtering, store directories, community submissions, and an admin management portal.
 
 ---
