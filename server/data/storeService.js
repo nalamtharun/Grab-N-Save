@@ -349,6 +349,51 @@ const storeService = {
     return null;
   },
 
+  async reportCoupon(id, reason, details = '') {
+    if (getIsConnected()) {
+      try {
+        const coupon = await Coupon.findById(id);
+        if (!coupon) return null;
+
+        coupon.reportCount = (coupon.reportCount || 0) + 1;
+        if (!coupon.reports) coupon.reports = [];
+        coupon.reports.push({ reason, details, reportedAt: new Date() });
+
+        // If coupon receives 3+ flags or marked fraudulent/expired, deactivate from active pool
+        if (
+          coupon.reportCount >= 3 ||
+          reason.toLowerCase().includes('fraud') ||
+          reason.toLowerCase().includes('fake') ||
+          reason.toLowerCase().includes('expired')
+        ) {
+          coupon.status = 'flagged';
+        }
+
+        return await coupon.save();
+      } catch (err) {
+        console.warn('MongoDB report error:', err.message);
+      }
+    }
+
+    const coupon = memoryCoupons.find((c) => c._id.toString() === id.toString());
+    if (coupon) {
+      coupon.reportCount = (coupon.reportCount || 0) + 1;
+      if (!coupon.reports) coupon.reports = [];
+      coupon.reports.push({ reason, details, reportedAt: new Date().toISOString() });
+
+      if (
+        coupon.reportCount >= 3 ||
+        reason.toLowerCase().includes('fraud') ||
+        reason.toLowerCase().includes('fake') ||
+        reason.toLowerCase().includes('expired')
+      ) {
+        coupon.status = 'flagged';
+      }
+      return coupon;
+    }
+    return null;
+  },
+
   // SUBMISSIONS
   async createSubmission(subData) {
     if (getIsConnected()) {

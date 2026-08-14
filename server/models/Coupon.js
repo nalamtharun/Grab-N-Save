@@ -94,9 +94,23 @@ const CouponSchema = new mongoose.Schema(
         trim: true,
       },
     ],
+    reportCount: {
+      type: Number,
+      default: 0,
+    },
+    reports: [
+      {
+        reason: String,
+        details: String,
+        reportedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
     status: {
       type: String,
-      enum: ['active', 'expired', 'pending', 'rejected'],
+      enum: ['active', 'expired', 'pending', 'rejected', 'flagged'],
       default: 'active',
     },
   },

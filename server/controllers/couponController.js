@@ -251,3 +251,40 @@ exports.copyCoupon = async (req, res) => {
     });
   }
 };
+
+// @desc    Report / Flag invalid, duplicate, or fraudulent coupon
+// @route   POST /api/coupons/:id/report
+exports.reportCoupon = async (req, res) => {
+  try {
+    const { reason, details } = req.body;
+    if (!reason) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a report reason',
+      });
+    }
+
+    const result = await storeService.reportCoupon(req.params.id, reason, details);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'Coupon not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message:
+        result.status === 'flagged' || result.status === 'expired'
+          ? 'Coupon has been flagged and removed from active deals.'
+          : 'Thank you! Your report has been submitted for review.',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to submit coupon report',
+      error: error.message,
+    });
+  }
+};

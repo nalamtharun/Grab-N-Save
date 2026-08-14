@@ -108,6 +108,17 @@ export const api = {
     return res.json();
   },
 
+  async reportCoupon(id, reason, details = '') {
+    const res = await fetch(`${API_BASE}/coupons/${id}/report`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ reason, details }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to submit report');
+    return data;
+  },
+
   // Stores
   async getStores() {
     const res = await fetch(`${API_BASE}/stores`);

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCoupons } from '../context/CouponContext';
+import { useAuth } from '../context/AuthContext';
 import {
   CheckCircle,
   Clock,
@@ -7,9 +8,10 @@ import {
   ThumbsDown,
   Bookmark,
   ExternalLink,
-  Copy,
   Sparkles,
   Scissors,
+  Flag,
+  Trash2,
 } from 'lucide-react';
 
 export const CouponCard = ({ coupon }) => {
@@ -20,8 +22,10 @@ export const CouponCard = ({ coupon }) => {
     handleVote,
     setActiveModalCoupon,
     setSelectedStore,
+    setReportModalCoupon,
   } = useCoupons();
 
+  const { isAdmin } = useAuth();
   const favorited = isFavorite(coupon._id);
 
   // Calculate days left until expiration
@@ -50,7 +54,7 @@ export const CouponCard = ({ coupon }) => {
 
   return (
     <div className="coupon-card">
-      {/* Top Header: Store Info & Bookmark */}
+      {/* Top Header: Store Info, Report/Delete & Bookmark */}
       <div
         style={{
           display: 'flex',
@@ -105,25 +109,56 @@ export const CouponCard = ({ coupon }) => {
           </div>
         </div>
 
-        {/* Favorite Bookmark Button */}
-        <button
-          onClick={() => toggleFavorite(coupon)}
-          style={{
-            background: favorited ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
-            border: 'none',
-            color: favorited ? '#10B981' : 'var(--text-muted)',
-            cursor: 'pointer',
-            padding: '0.3rem',
-            borderRadius: '6px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all var(--transition-fast)',
-          }}
-          title={favorited ? 'Remove from Saved' : 'Save to Favorites'}
-        >
-          <Bookmark size={16} fill={favorited ? '#10B981' : 'none'} />
-        </button>
+        {/* Action Buttons: Report/Delete & Bookmark */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          {/* Report / Remove Button */}
+          <button
+            onClick={() => setReportModalCoupon(coupon)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: isAdmin ? '#FB7185' : 'var(--text-muted)',
+              cursor: 'pointer',
+              padding: '0.3rem',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all var(--transition-fast)',
+            }}
+            title={isAdmin ? 'Delete / Manage Coupon (Admin)' : 'Report Invalid / Fake Coupon'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = isAdmin ? '#F43F5E' : '#F59E0B';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = isAdmin ? '#FB7185' : 'var(--text-muted)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            {isAdmin ? <Trash2 size={15} /> : <Flag size={15} />}
+          </button>
+
+          {/* Favorite Bookmark Button */}
+          <button
+            onClick={() => toggleFavorite(coupon)}
+            style={{
+              background: favorited ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
+              border: 'none',
+              color: favorited ? '#10B981' : 'var(--text-muted)',
+              cursor: 'pointer',
+              padding: '0.3rem',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all var(--transition-fast)',
+            }}
+            title={favorited ? 'Remove from Saved' : 'Save to Favorites'}
+          >
+            <Bookmark size={15} fill={favorited ? '#10B981' : 'none'} />
+          </button>
+        </div>
       </div>
 
       {/* Badges Strip */}

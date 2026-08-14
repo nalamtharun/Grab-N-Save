@@ -43,6 +43,7 @@ export const CouponProvider = ({ children }) => {
 
   // UI Modals & Drawers
   const [activeModalCoupon, setActiveModalCoupon] = useState(null);
+  const [reportModalCoupon, setReportModalCoupon] = useState(null);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isSavedDrawerOpen, setIsSavedDrawerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -172,7 +173,7 @@ export const CouponProvider = ({ children }) => {
       await navigator.clipboard.writeText(textToCopy);
       triggerConfetti();
       showToast(`Promo code "${coupon.code || 'DEAL'}" copied to clipboard!`, 'success');
-      
+
       // Update backend usage counter
       api.copyCoupon(coupon._id).catch(() => {});
 
@@ -186,6 +187,51 @@ export const CouponProvider = ({ children }) => {
       showToast('Could not copy code. Please copy manually.', 'error');
     }
   }, [showToast, triggerConfetti]);
+
+  // Delete coupon handler (admin or direct removal)
+  const deleteCoupon = useCallback(async (couponId) => {
+    try {
+      const res = await api.deleteCoupon(couponId);
+      if (res.success) {
+        setCoupons((prev) => prev.filter((c) => c._id !== couponId));
+        setTotalCount((prev) => Math.max(prev - 1, 0));
+        setFavorites((prev) => prev.filter((c) => c._id !== couponId));
+        showToast('🗑️ Coupon removed successfully from active deals', 'info');
+        return true;
+      }
+      return false;
+    } catch (err) {
+      showToast('Failed to delete coupon: ' + err.message, 'error');
+      return false;
+    }
+  }, [showToast]);
+
+  // Report coupon handler
+  const reportCoupon = useCallback(async (couponId, reason, details = '') => {
+    try {
+      const res = await api.reportCoupon(couponId, reason, details);
+      if (res.success) {
+        if (
+          res.data?.status === 'flagged' ||
+          reason.toLowerCase().includes('fraud') ||
+          reason.toLowerCase().includes('fake') ||
+          reason.toLowerCase().includes('expired')
+        ) {
+          // Immediately remove from active feed
+          setCoupons((prev) => prev.filter((c) => c._id !== couponId));
+          setTotalCount((prev) => Math.max(prev - 1, 0));
+          showToast('🚩 Coupon flagged and removed from active deals', 'info');
+        } else {
+          showToast('🚩 Report submitted for moderator review. Thank you!', 'success');
+        }
+        return true;
+      }
+      return false;
+    } catch (err) {
+      showToast('Error submitting report: ' + err.message, 'error');
+      return false;
+    }
+  }, [showToast]);
 
   // Vote handler
   const handleVote = useCallback(async (couponId, type) => {
@@ -239,6 +285,10 @@ export const CouponProvider = ({ children }) => {
         isFavorite,
         activeModalCoupon,
         setActiveModalCoupon,
+        reportModalCoupon,
+        setReportModalCoupon,
+        deleteCoupon,
+        reportCoupon,
         isSubmitModalOpen,
         setIsSubmitModalOpen,
         isSavedDrawerOpen,

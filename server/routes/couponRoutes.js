@@ -8,6 +8,7 @@ const {
   deleteCoupon,
   voteCoupon,
   copyCoupon,
+  reportCoupon,
 } = require('../controllers/couponController');
 
 router.route('/')
@@ -21,5 +22,6 @@ router.route('/:id')
 
 router.post('/:id/vote', voteCoupon);
 router.post('/:id/copy', copyCoupon);
+router.post('/:id/report', reportCoupon);
 
 module.exports = router;

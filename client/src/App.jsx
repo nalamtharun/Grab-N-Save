@@ -12,6 +12,7 @@ import { SubmitCouponModal } from './components/SubmitCouponModal';
 import { AdminPanel } from './components/AdminPanel';
 import { SavedDealsDrawer } from './components/SavedDealsDrawer';
 import { AuthModal } from './components/AuthModal';
+import { ReportCouponModal } from './components/ReportCouponModal';
 import { ToastContainer } from './components/Toast';
 import { Footer } from './components/Footer';
 import {
@@ -45,6 +46,7 @@ export const App = () => {
 
       {/* Global Modals & Drawers */}
       <AuthModal />
+      <ReportCouponModal />
       <CouponModal />
       <SubmitCouponModal />
       <AdminPanel />
