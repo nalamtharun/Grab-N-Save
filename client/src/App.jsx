@@ -11,6 +11,7 @@ import { CouponModal } from './components/CouponModal';
 import { SubmitCouponModal } from './components/SubmitCouponModal';
 import { AdminPanel } from './components/AdminPanel';
 import { SavedDealsDrawer } from './components/SavedDealsDrawer';
+import { AuthModal } from './components/AuthModal';
 import { ToastContainer } from './components/Toast';
 import { Footer } from './components/Footer';
 import {
@@ -43,6 +44,7 @@ export const App = () => {
       <ToastContainer />
 
       {/* Global Modals & Drawers */}
+      <AuthModal />
       <CouponModal />
       <SubmitCouponModal />
       <AdminPanel />
@@ -92,10 +94,10 @@ export const App = () => {
                   {selectedStore !== 'all'
                     ? `${selectedStore} Coupons & Deals`
                     : selectedCategory !== 'all'
-                    ? `${selectedCategory} Deals`
-                    : searchQuery
-                    ? `Results for "${searchQuery}"`
-                    : 'Trending Promo Codes & Deals'}
+                      ? `${selectedCategory} Deals`
+                      : searchQuery
+                        ? `Results for "${searchQuery}"`
+                        : 'Trending Promo Codes & Deals'}
                 </span>
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
@@ -106,7 +108,7 @@ export const App = () => {
 
           {/* 2-Column Responsive Layout (Sidebar + Deals Grid) */}
           <div className="deals-layout">
-            
+
             {/* Left Filter Sidebar */}
             <div className="sidebar-container">
               <FilterSidebar />
@@ -120,19 +122,19 @@ export const App = () => {
                   style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                    gap: '1.25rem',
+                    gap: '1rem',
                   }}
                 >
                   {[...Array(6)].map((_, i) => (
                     <div
                       key={i}
                       className="glass-card"
-                      style={{ padding: '1.5rem', height: '280px' }}
+                      style={{ padding: '1.15rem', height: '220px' }}
                     >
-                      <div className="skeleton" style={{ height: '40px', width: '40%', marginBottom: '1rem' }} />
-                      <div className="skeleton" style={{ height: '28px', width: '70%', marginBottom: '0.75rem' }} />
-                      <div className="skeleton" style={{ height: '60px', width: '100%', marginBottom: '1.5rem' }} />
-                      <div className="skeleton" style={{ height: '42px', width: '100%' }} />
+                      <div className="skeleton" style={{ height: '32px', width: '45%', marginBottom: '0.65rem' }} />
+                      <div className="skeleton" style={{ height: '22px', width: '70%', marginBottom: '0.5rem' }} />
+                      <div className="skeleton" style={{ height: '44px', width: '100%', marginBottom: '1rem' }} />
+                      <div className="skeleton" style={{ height: '34px', width: '100%' }} />
                     </div>
                   ))}
                 </div>
@@ -188,8 +190,8 @@ export const App = () => {
                     style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: '1.25rem',
-                      marginBottom: '2.5rem',
+                      gap: '1rem',
+                      marginBottom: '2rem',
                     }}
                   >
                     {coupons.map((coupon) => (
@@ -197,40 +199,104 @@ export const App = () => {
                     ))}
                   </div>
 
-                  {/* Pagination Controls */}
+                  {/* Enhanced Pagination Controls (6 items per page) */}
                   {totalPages > 1 && (
                     <div
                       style={{
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        justifyContent: 'center',
                         gap: '0.75rem',
-                        marginTop: '2rem',
+                        marginTop: '1.5rem',
                       }}
                     >
-                      <button
-                        onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                        disabled={page === 1}
-                        className="btn btn-secondary btn-sm"
-                        style={{ opacity: page === 1 ? 0.5 : 1, cursor: page === 1 ? 'not-allowed' : 'pointer' }}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.5rem',
+                          background: 'var(--bg-surface)',
+                          padding: '0.4rem 0.75rem',
+                          borderRadius: 'var(--radius-md)',
+                          border: '1px solid var(--border-subtle)',
+                        }}
                       >
-                        <ChevronLeft size={16} />
-                        <span>Previous</span>
-                      </button>
+                        {/* Prev Button */}
+                        <button
+                          onClick={() => {
+                            setPage((p) => Math.max(p - 1, 1));
+                            document.getElementById('deals')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          disabled={page === 1}
+                          className="btn btn-secondary btn-sm"
+                          style={{
+                            opacity: page === 1 ? 0.35 : 1,
+                            cursor: page === 1 ? 'not-allowed' : 'pointer',
+                            padding: '0.35rem 0.65rem',
+                          }}
+                          aria-label="Previous Page"
+                        >
+                          <ChevronLeft size={16} />
+                          <span>Prev</span>
+                        </button>
 
-                      <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                        Page <strong style={{ color: '#F8FAFC' }}>{page}</strong> of {totalPages}
+                        {/* Page Number Pills */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          {[...Array(totalPages)].map((_, idx) => {
+                            const pageNum = idx + 1;
+                            const isActive = page === pageNum;
+                            return (
+                              <button
+                                key={pageNum}
+                                onClick={() => {
+                                  setPage(pageNum);
+                                  document.getElementById('deals')?.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                style={{
+                                  width: '32px',
+                                  height: '32px',
+                                  borderRadius: '6px',
+                                  border: isActive ? '1px solid #10B981' : '1px solid transparent',
+                                  background: isActive
+                                    ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                                    : 'transparent',
+                                  color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
+                                  fontWeight: 700,
+                                  fontSize: '0.85rem',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.15s ease',
+                                }}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Next Button */}
+                        <button
+                          onClick={() => {
+                            setPage((p) => Math.min(p + 1, totalPages));
+                            document.getElementById('deals')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          disabled={page === totalPages}
+                          className="btn btn-secondary btn-sm"
+                          style={{
+                            opacity: page === totalPages ? 0.35 : 1,
+                            cursor: page === totalPages ? 'not-allowed' : 'pointer',
+                            padding: '0.35rem 0.65rem',
+                          }}
+                          aria-label="Next Page"
+                        >
+                          <span>Next</span>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+
+                      <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+                        Showing page {page} of {totalPages} (6 deals per page)
                       </span>
-
-                      <button
-                        onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                        disabled={page === totalPages}
-                        className="btn btn-secondary btn-sm"
-                        style={{ opacity: page === totalPages ? 0.5 : 1, cursor: page === totalPages ? 'not-allowed' : 'pointer' }}
-                      >
-                        <span>Next</span>
-                        <ChevronRight size={16} />
-                      </button>
                     </div>
                   )}
                 </>

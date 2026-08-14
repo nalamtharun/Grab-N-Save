@@ -101,7 +101,7 @@ export const CouponProvider = ({ children }) => {
         verifiedOnly,
         sort: sortBy,
         page,
-        limit: 12,
+        limit: 6,
       });
 
       if (res.success) {

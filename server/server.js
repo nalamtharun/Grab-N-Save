@@ -6,6 +6,7 @@ const { connectDB } = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 
 // Route imports
+const authRoutes = require('./routes/authRoutes');
 const couponRoutes = require('./routes/couponRoutes');
 const storeRoutes = require('./routes/storeRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
@@ -42,6 +43,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/stores', storeRoutes);
 app.use('/api/categories', categoryRoutes);

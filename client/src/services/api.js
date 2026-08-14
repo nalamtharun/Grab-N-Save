@@ -1,6 +1,47 @@
 const API_BASE = '/api';
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('gns_token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+};
+
 export const api = {
+  // Auth
+  async login(email, password) {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Login failed');
+    return data;
+  },
+
+  async register(name, email, password) {
+    const res = await fetch(`${API_BASE}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Registration failed');
+    return data;
+  },
+
+  async getMe() {
+    const res = await fetch(`${API_BASE}/auth/me`, {
+      headers: getAuthHeaders(),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to fetch user profile');
+    return data;
+  },
+
   // Coupons
   async getCoupons(params = {}) {
     const query = new URLSearchParams();
@@ -23,7 +64,7 @@ export const api = {
   async createCoupon(data) {
     const res = await fetch(`${API_BASE}/coupons`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error('Failed to create coupon');
@@ -33,7 +74,7 @@ export const api = {
   async updateCoupon(id, data) {
     const res = await fetch(`${API_BASE}/coupons/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error('Failed to update coupon');
@@ -43,6 +84,7 @@ export const api = {
   async deleteCoupon(id) {
     const res = await fetch(`${API_BASE}/coupons/${id}`, {
       method: 'DELETE',
+      headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error('Failed to delete coupon');
     return res.json();
@@ -97,7 +139,7 @@ export const api = {
   async submitDeal(data) {
     const res = await fetch(`${API_BASE}/submissions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error('Failed to submit deal');

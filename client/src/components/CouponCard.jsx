@@ -56,17 +56,17 @@ export const CouponCard = ({ coupon }) => {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'space-between',
-          marginBottom: '1rem',
-          gap: '0.75rem',
+          marginBottom: '0.65rem',
+          gap: '0.5rem',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <div
             onClick={() => setSelectedStore(coupon.storeName)}
             style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '10px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '8px',
               overflow: 'hidden',
               background: '#1e293b',
               border: '1px solid var(--border-subtle)',
@@ -91,7 +91,7 @@ export const CouponCard = ({ coupon }) => {
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 700,
-                fontSize: '1rem',
+                fontSize: '0.925rem',
                 color: '#F8FAFC',
                 cursor: 'pointer',
                 lineHeight: 1.2,
@@ -99,7 +99,7 @@ export const CouponCard = ({ coupon }) => {
             >
               {coupon.storeName}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
               {coupon.categoryName}
             </div>
           </div>
@@ -113,8 +113,8 @@ export const CouponCard = ({ coupon }) => {
             border: 'none',
             color: favorited ? '#10B981' : 'var(--text-muted)',
             cursor: 'pointer',
-            padding: '0.4rem',
-            borderRadius: '8px',
+            padding: '0.3rem',
+            borderRadius: '6px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -122,7 +122,7 @@ export const CouponCard = ({ coupon }) => {
           }}
           title={favorited ? 'Remove from Saved' : 'Save to Favorites'}
         >
-          <Bookmark size={18} fill={favorited ? '#10B981' : 'none'} />
+          <Bookmark size={16} fill={favorited ? '#10B981' : 'none'} />
         </button>
       </div>
 
@@ -132,53 +132,64 @@ export const CouponCard = ({ coupon }) => {
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
-          gap: '0.4rem',
-          marginBottom: '0.85rem',
+          gap: '0.35rem',
+          marginBottom: '0.55rem',
         }}
       >
         {coupon.isVerified && (
-          <span className="badge badge-verified">
-            <CheckCircle size={11} />
+          <span className="badge badge-verified" style={{ padding: '0.15rem 0.5rem', fontSize: '0.7rem' }}>
+            <CheckCircle size={10} />
             Verified
           </span>
         )}
 
         {coupon.isExclusive && (
-          <span className="badge badge-exclusive">
-            <Sparkles size={11} />
+          <span className="badge badge-exclusive" style={{ padding: '0.15rem 0.5rem', fontSize: '0.7rem' }}>
+            <Sparkles size={10} />
             Exclusive
           </span>
         )}
 
         {daysLeft !== null && daysLeft <= 7 && daysLeft > 0 && (
-          <span className="badge badge-expiring">
-            <Clock size={11} />
+          <span className="badge badge-expiring" style={{ padding: '0.15rem 0.5rem', fontSize: '0.7rem' }}>
+            <Clock size={10} />
             {daysLeft}d left
           </span>
         )}
       </div>
 
       {/* Discount Highlight & Title */}
-      <div style={{ marginBottom: '1rem' }}>
-        <div className="coupon-discount-box" style={{ marginBottom: '0.75rem' }}>
+      <div style={{ marginBottom: '0.65rem' }}>
+        <div
+          className="coupon-discount-box"
+          style={{
+            marginBottom: '0.45rem',
+            padding: '0.35rem 0.65rem',
+            fontSize: '1.05rem',
+          }}
+        >
           {coupon.discount}
         </div>
         <h3
           style={{
-            fontSize: '1.05rem',
+            fontSize: '0.95rem',
             fontWeight: 700,
             color: '#F8FAFC',
-            lineHeight: 1.4,
-            marginBottom: '0.5rem',
+            lineHeight: 1.3,
+            marginBottom: '0.3rem',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {coupon.title}
         </h3>
         <p
           style={{
-            fontSize: '0.85rem',
+            fontSize: '0.8rem',
             color: 'var(--text-secondary)',
-            lineHeight: 1.5,
+            lineHeight: 1.4,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
@@ -190,20 +201,20 @@ export const CouponCard = ({ coupon }) => {
       </div>
 
       {/* Success Rate Bar */}
-      <div style={{ marginTop: 'auto', marginBottom: '1rem' }}>
+      <div style={{ marginTop: 'auto', marginBottom: '0.65rem' }}>
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: '0.75rem',
+            fontSize: '0.72rem',
             fontWeight: 600,
             color: 'var(--text-secondary)',
-            marginBottom: '0.35rem',
+            marginBottom: '0.25rem',
           }}
         >
           <span style={{ color: successPercentage > 85 ? '#34D399' : '#F59E0B' }}>
-            {successPercentage}% Working Success
+            {successPercentage}% Success
           </span>
           <span style={{ color: 'var(--text-muted)' }}>
             {(coupon.usedCount || 0).toLocaleString()} uses
@@ -211,7 +222,7 @@ export const CouponCard = ({ coupon }) => {
         </div>
         <div
           style={{
-            height: '4px',
+            height: '3px',
             width: '100%',
             backgroundColor: '#1e293b',
             borderRadius: '2px',
@@ -230,7 +241,7 @@ export const CouponCard = ({ coupon }) => {
       </div>
 
       {/* Action Area: Code Reveal / Deal Activation */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         {coupon.code ? (
           <button
             onClick={handleActionClick}
@@ -240,20 +251,21 @@ export const CouponCard = ({ coupon }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0.65rem 1rem',
+              padding: '0.5rem 0.85rem',
+              fontSize: '0.875rem',
             }}
           >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-              <Scissors size={16} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <Scissors size={14} />
               <span>Get Code</span>
             </span>
             <span
               style={{
                 fontFamily: 'monospace',
                 background: 'rgba(0, 0, 0, 0.25)',
-                padding: '0.2rem 0.5rem',
-                borderRadius: '6px',
-                fontSize: '0.825rem',
+                padding: '0.15rem 0.45rem',
+                borderRadius: '5px',
+                fontSize: '0.775rem',
                 letterSpacing: '0.05em',
               }}
             >
@@ -264,10 +276,10 @@ export const CouponCard = ({ coupon }) => {
           <button
             onClick={handleActionClick}
             className="btn btn-primary"
-            style={{ width: '100%' }}
+            style={{ width: '100%', padding: '0.5rem 0.85rem', fontSize: '0.875rem' }}
           >
             <span>Activate Deal</span>
-            <ExternalLink size={15} />
+            <ExternalLink size={14} />
           </button>
         )}
 
@@ -277,13 +289,13 @@ export const CouponCard = ({ coupon }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingTop: '0.35rem',
+            paddingTop: '0.2rem',
           }}
         >
-          <span style={{ fontSize: '0.725rem', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
             Did this deal work?
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
             <button
               onClick={() => handleVote(coupon._id, 'up')}
               style={{
@@ -293,12 +305,12 @@ export const CouponCard = ({ coupon }) => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.25rem',
-                fontSize: '0.75rem',
+                gap: '0.2rem',
+                fontSize: '0.72rem',
               }}
               title="Yes, it worked!"
             >
-              <ThumbsUp size={13} color="#10B981" />
+              <ThumbsUp size={12} color="#10B981" />
               <span>{coupon.upvotes || 0}</span>
             </button>
             <button
@@ -310,12 +322,12 @@ export const CouponCard = ({ coupon }) => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.25rem',
-                fontSize: '0.75rem',
+                gap: '0.2rem',
+                fontSize: '0.72rem',
               }}
               title="No, it failed"
             >
-              <ThumbsDown size={13} color="#F43F5E" />
+              <ThumbsDown size={12} color="#F43F5E" />
               <span>{coupon.downvotes || 0}</span>
             </button>
           </div>
